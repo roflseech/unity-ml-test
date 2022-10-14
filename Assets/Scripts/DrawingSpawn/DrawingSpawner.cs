@@ -1,12 +1,18 @@
 using System.Text;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Barracuda;
 using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 public class DrawingSpawner : MonoBehaviour
 {
     [SerializeField]
     private NNModel _model;
+    [SerializeField]
+    private TextAsset _textAsset;
 
     [SerializeField]
     private VirtualTextureManager _textureManager;
@@ -18,9 +24,23 @@ public class DrawingSpawner : MonoBehaviour
     private TMP_Text _text;
 
     private ImageRecognizer _imageRecognizer;
+    private ClassList _classList;
+
+    [System.Serializable]
+    private class ClassList
+    {
+        public List<string> Items;
+        public ClassList()
+        {
+            Items = new();
+        }
+    }
+
     private void Start()
     {
-        _imageRecognizer = new ImageRecognizer(_model, 28, 28, 10);
+        _classList = JsonUtility.FromJson<ClassList>(_textAsset.text);
+
+        _imageRecognizer = new ImageRecognizer(_model, 28, 28, 5);
         var texture = new Texture2D(512, 512);
 
         _targetCanvasSprite.sprite = Sprite.Create(
@@ -55,7 +75,7 @@ public class DrawingSpawner : MonoBehaviour
                 w);
 
             var max = _imageRecognizer.GetProbabilities(subset).GetMax();
-            _text.text = max.Item1.ToString();
+            _text.text = _classList.Items[max.Item1];
 
             _targetCanvasSprite.sprite.texture.SetPixels(subset.Pixels);
             _targetCanvasSprite.sprite.texture.Apply();
