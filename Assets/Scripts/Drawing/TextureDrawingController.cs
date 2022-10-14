@@ -52,8 +52,4 @@ public class TextureDrawingController : MonoBehaviour
             _prevTouch = false;
         }
     }
-    private void LateUpdate()
-    {
-        //_textureDrawing.UpdateTexture();
-    }
 }
