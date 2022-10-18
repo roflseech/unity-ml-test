@@ -105,7 +105,29 @@ namespace ImageRecognition
                 }
             }
         }
+        /// <summary>
+        /// 0.0f <= x, y <= 1.0f
+        /// </summary>
+        public void RelativeDrawAt(float x, float y, int width, Color color)
+        {
+            int pixelX = (int)(x * Width);
+            int pixelY = (int)(y * Height);
 
+            DrawAt(pixelX, pixelY, width, color);
+        }
+        /// <summary>
+        /// 0.0f <= start, end <= 1.0f
+        /// </summary>
+        public void RelativeDrawLine(Vector2 start, Vector2 end, int width, Color color)
+        {
+            int startX = Mathf.RoundToInt(start.x * Width);
+            int startY = Mathf.RoundToInt(start.y * Height);
+
+            int endX = Mathf.RoundToInt(end.x * Width);
+            int endY = Mathf.RoundToInt(end.y * Height);
+
+            DrawLine(startX, startY, endX, endY, width, color);
+        }
         public void FillColor(Color color)
         {
             for (int i = 0; i < _pixels.Length; i++)
