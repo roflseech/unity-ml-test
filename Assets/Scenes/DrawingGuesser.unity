@@ -407,8 +407,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25d5cee4bb86a4e4d8b2cad1f1ae26d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _model: {fileID: 5022602860645237092, guid: 4ae0a227fb69aac4a86b282a8cc86dca, type: 3}
-  _classNames: {fileID: 4900000, guid: 3cf22469b8b104e43b0aa394b684525d, type: 3}
+  _modelDefinition: {fileID: 11400000, guid: 4bf6987f8cedadb4bafbb754c58641eb, type: 2}
   _textureManager: {fileID: 1612306502}
   _targetCanvasSprite: {fileID: 1306997980}
   _text: {fileID: 194060755}

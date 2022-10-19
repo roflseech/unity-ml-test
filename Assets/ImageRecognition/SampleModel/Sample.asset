@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08cf23a52fe4807469f4a655c3f89cfd, type: 3}
   m_Name: Sample
   m_EditorClassIdentifier: 
-  _model: {fileID: 0}
-  _classList: {fileID: 0}
-  _imageSize: 0
+  _model: {fileID: 5022602860645237092, guid: 4ae0a227fb69aac4a86b282a8cc86dca, type: 3}
+  _classList: {fileID: 4900000, guid: 3cf22469b8b104e43b0aa394b684525d, type: 3}
+  _imageSize: 28
