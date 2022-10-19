@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using TMPro;
-using Unity.Barracuda;
 using UnityEngine;
 
 namespace ImageRecognition.Samples
@@ -9,9 +7,7 @@ namespace ImageRecognition.Samples
     {
         [Header("Model")]
         [SerializeField]
-        private NNModel _model;
-        [SerializeField]
-        private TextAsset _classNames;
+        private ImageRecognitionModelDefinition _modelDefinition;
 
         [Header("Scene Objects")]
         [SerializeField]
@@ -29,24 +25,12 @@ namespace ImageRecognition.Samples
         [SerializeField]
         private int _targetImageSize = 28;
 
-        private ImageRecognizer _imageRecognizer;
-        private ClassList _classList;
-
-        [System.Serializable]
-        private class ClassList
-        {
-            public List<string> Items;
-            public ClassList()
-            {
-                Items = new();
-            }
-        }
+        private ImageRecognitionModel _model;
 
         private void Start()
         {
-            _classList = JsonUtility.FromJson<ClassList>(_classNames.text);
+            _model = _modelDefinition.CreateModel();
 
-            _imageRecognizer = new ImageRecognizer(_model, 28, 28, 5);
             var texture = new Texture2D(512, 512);
 
             _targetCanvasSprite.sprite = Sprite.Create(
@@ -80,8 +64,8 @@ namespace ImageRecognition.Samples
                     Vector2.one * 0.5f,
                     w);
 
-                var max = GetMax(_imageRecognizer.GetProbabilities(processed));
-                _text.text = _classList.Items[max.Item1];
+
+                _text.text = _model.PredictClassName(processed);
 
                 _targetCanvasSprite.sprite.texture.SetPixels(processed.Pixels);
                 _targetCanvasSprite.sprite.texture.Apply();
@@ -89,23 +73,7 @@ namespace ImageRecognition.Samples
         }
         private void OnDestroy()
         {
-            _imageRecognizer.Dispose();
-        }
-        private (int, float) GetMax(float[] values)
-        {
-            float max = values[0];
-            int maxIndex = 0;
-
-            for (int i = 1; i < values.Length; i++)
-            {
-                if (values[i] > max)
-                {
-                    max = values[i];
-                    maxIndex = i;
-                }
-            }
-
-            return (maxIndex, max);
+            _model.Dispose();
         }
     }
 }

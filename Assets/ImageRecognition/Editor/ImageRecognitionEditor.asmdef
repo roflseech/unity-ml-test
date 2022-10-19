@@ -1,0 +1,19 @@
+{
+    "name": "ImageRecognitionEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:d0f620e8328ef104da0f9190fbd69970",
+        "GUID:5c2b5ba89f9e74e418232e154bc5cc7a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

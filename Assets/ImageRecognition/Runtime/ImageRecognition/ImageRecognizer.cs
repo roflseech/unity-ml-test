@@ -24,7 +24,33 @@ namespace ImageRecognition
             _height = height;
             _classCount = classCount;
         }
-        public float[] GetProbabilities(VirtualTexture virtualTexture)
+        public PredictionEntry Predict(VirtualTexture virtualTexture)
+        {
+            var probabilities = GetProbabilities(virtualTexture);
+
+            var max = GetMax(probabilities);
+
+            return new PredictionEntry(max.Item1, max.Item2);
+        }
+        public PredictionEntry[] PredictProbabilities(VirtualTexture virtualTexture)
+        {
+            var probabilities = GetProbabilities(virtualTexture);
+
+            PredictionEntry[] predictions = new PredictionEntry[probabilities.Length];
+
+            for (int i = 0; i < probabilities.Length; i++)
+            {
+                predictions[i] = new PredictionEntry(i, probabilities[i]);
+            }
+
+            return predictions;
+        }
+        public void Dispose()
+        {
+            _worker.Dispose();
+            _input?.Dispose();
+        }
+        private float[] GetProbabilities(VirtualTexture virtualTexture)
         {
             if (virtualTexture.Width != _width ||
                 virtualTexture.Height != _height)
@@ -54,14 +80,26 @@ namespace ImageRecognition
 
             return data;
         }
-        public void Dispose()
-        {
-            _worker.Dispose();
-            _input?.Dispose();
-        }
+
         private float ColorToFloat(Color color)
         {
             return (color.r + color.g + color.b) / 3.0f;
+        }
+        private (int, float) GetMax(float[] values)
+        {
+            float max = values[0];
+            int maxIndex = 0;
+
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i] > max)
+                {
+                    max = values[i];
+                    maxIndex = i;
+                }
+            }
+
+            return (maxIndex, max);
         }
     }
 }
