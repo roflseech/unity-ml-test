@@ -1,4 +1,5 @@
 using UnityEditor;
+using UnityEngine;
 
 namespace ImageRecognition
 {
@@ -11,6 +12,7 @@ namespace ImageRecognition
         private SerializedProperty _classListProperty;
         private SerializedProperty _imageSizeProperty;
 
+        private TextAsset _lastClassListAsset;
         private ModelClassList _classList;
         private bool _expandedClassList;
         private void OnEnable()
@@ -20,18 +22,13 @@ namespace ImageRecognition
             _modelProperty = serializedObject.FindProperty("_model");
             _classListProperty = serializedObject.FindProperty("_classList");
             _imageSizeProperty = serializedObject.FindProperty("_imageSize");
-
-            if (_modelDefinition.ClassList != null)
-            {
-                _classList = _modelDefinition.CreateClassList();
-            }
-            else
-            {
-                _classList = null;
-            }
         }
         public override void OnInspectorGUI()
         {
+            serializedObject.Update();
+
+            UpdateClassListIfNeeded();
+
             EditorGUILayout.PropertyField(_modelProperty);
             EditorGUILayout.PropertyField(_classListProperty);
             EditorGUILayout.PropertyField(_imageSizeProperty);
@@ -48,6 +45,23 @@ namespace ImageRecognition
                     EditorGUILayout.LabelField(className);
                 }
                 EditorGUI.indentLevel -= 1;
+            }
+            serializedObject.ApplyModifiedProperties();
+        }
+        private void UpdateClassListIfNeeded()
+        {
+            if (_lastClassListAsset != _modelDefinition.ClassList)
+            {
+                _lastClassListAsset = _modelDefinition.ClassList;
+
+                if (_lastClassListAsset != null)
+                {
+                    _classList = _modelDefinition.CreateClassList();
+                }
+                else
+                {
+                    _classList = null;
+                }
             }
         }
     }
